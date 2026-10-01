@@ -8,6 +8,11 @@ class UserRepository:
     def __init__(self, db:Session):
         self.db = db
 
+    def get_by_id(self, id:int)-> User | None:
+        smtm = select(User).where(User.id == id)
+        result = self.db.execute(smtm)
+        return result.scalar_one_or_none()
+
     def get_by_email(self, email:str)-> User | None:
         smtm = select(User).where(User.email == email)
         result = self.db.execute(smtm)

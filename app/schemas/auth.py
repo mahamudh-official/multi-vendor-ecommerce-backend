@@ -27,3 +27,6 @@ class UserLogin(BaseModel):
 class UserLoginResponse(BaseModel):
     access_token: str
     token_type: str
+
+class AccessToken(BaseModel):
+    token: str
