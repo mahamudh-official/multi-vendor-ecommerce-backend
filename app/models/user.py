@@ -1,10 +1,16 @@
 from datetime import datetime, timezone
+from enum import Enum
 
 from sqlalchemy import Boolean, DateTime, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base
 
+
+class UserRole(str, Enum):
+    CUSTOMER = "customer"
+    SELLER = "seller"
+    ADMIN = "admin"
 
 class User(Base):
     __tablename__ = "users"
@@ -18,4 +24,5 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime,default=datetime.now(timezone.utc), nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    role: Mapped[UserRole] = mapped_column(default=UserRole.CUSTOMER, nullable=False)
 

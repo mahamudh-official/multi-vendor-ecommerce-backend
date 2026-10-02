@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.api.dependencies import get_current_user
+from app.api.dependencies import get_current_user, required_role
+from app.models.user import User, UserRole
 from app.schemas.auth import AccessToken, UserLogin, UserLoginResponse, UserRegister, UserResponse
 from app.core.database import get_db
 from app.services.auth import AuthService
-
 
 
 router = APIRouter(
@@ -35,3 +35,14 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserResponse)
 def me(current_user: AccessToken = Depends(get_current_user)):
     return current_user
+
+
+@router.get("/seller-admin-test")
+def admin_test(
+    current_user: User = Depends(required_role(UserRole.ADMIN, UserRole.SELLER)),
+):
+    return {
+        "message": "Admin access granted",
+        "username": current_user.username,
+        "role": current_user.role,
+    }
