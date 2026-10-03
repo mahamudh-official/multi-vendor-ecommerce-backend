@@ -4,6 +4,7 @@ from app.core.security import create_access_token, hash_password, verify_passwor
 from app.models.user import User
 from app.repositories.user import UserRepository
 from app.schemas.auth import UserRegister
+from app.schemas.user import UserUpdate
 
 
 class AuthService:
@@ -47,5 +48,10 @@ class AuthService:
 
         token = create_access_token({"sub": str(user.id)})
         return {"access_token": token, "token_type": "bearer"}
+
+    def update(self, user: User, update_data: UserUpdate) -> User:
+
+        update_dict = update_data.model_dump(exclude_unset=True)
+        return self.user_repository.update(user, update_dict)
         
         

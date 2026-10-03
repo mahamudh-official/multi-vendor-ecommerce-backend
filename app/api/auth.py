@@ -37,12 +37,4 @@ def me(current_user: AccessToken = Depends(get_current_user)):
     return current_user
 
 
-@router.get("/seller-admin-test")
-def admin_test(
-    current_user: User = Depends(required_role(UserRole.ADMIN, UserRole.SELLER)),
-):
-    return {
-        "message": "Admin access granted",
-        "username": current_user.username,
-        "role": current_user.role,
-    }
+

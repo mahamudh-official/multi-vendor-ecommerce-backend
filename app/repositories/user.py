@@ -22,3 +22,15 @@ class UserRepository:
         smtm = select(User).where(User.username == username)
         result = self.db.execute(smtm)
         return result.scalar_one_or_none()
+
+    def get_by_phone_number(self, phone_number:str)-> User | None:
+        smtm = select(User).where(User.phone_number == phone_number)
+        result = self.db.execute(smtm)
+        return result.scalar_one_or_none()
+
+    def update(self, user:User, update_data: dict)-> User:
+        for key, value in update_data.items():
+            setattr(user, key, value)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
